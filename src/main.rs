@@ -1,4 +1,6 @@
 mod controllers;
+mod database;
+mod util;
 
 use actix_web::{guard, web, App, HttpResponse, HttpServer};
 use controllers::{static_controller, templates_controller};
