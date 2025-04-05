@@ -4,11 +4,10 @@
 use bigdecimal::BigDecimal;
 use chrono::offset::Utc;
 use chrono::DateTime;
-use diesel::{Queryable, Selectable};
-use serde::Serialize;
+use diesel::{Identifiable, Insertable, Queryable, Selectable};
 use uuid::Uuid;
 
-#[derive(Queryable, Selectable, Debug)]
+#[derive(Queryable, Insertable, Selectable, Identifiable, Debug)]
 #[diesel(table_name = crate::database::schema::double_chess_games)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct DoubleChessGame {
@@ -20,7 +19,7 @@ pub struct DoubleChessGame {
     pub result: i32,
 }
 
-#[derive(Queryable, Selectable, Debug)]
+#[derive(Queryable, Insertable, Selectable, Identifiable, Debug)]
 #[diesel(table_name = crate::database::schema::users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct User {

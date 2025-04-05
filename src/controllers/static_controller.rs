@@ -1,7 +1,7 @@
-use std::path::Path;
 use actix_files::{file_extension_to_mime, NamedFile};
-use actix_web::{get, Error, HttpRequest, HttpResponse};
 use actix_web::http::header::CONTENT_TYPE;
+use actix_web::{get, Error, HttpRequest, HttpResponse};
+use std::path::Path;
 
 #[get("/static/{filename:.*}")]
 async fn assets_provider(req: HttpRequest) -> actix_web::Result<HttpResponse, Error> {
@@ -18,6 +18,7 @@ async fn assets_provider(req: HttpRequest) -> actix_web::Result<HttpResponse, Er
     };
     file = file.set_content_type(mime.clone());
     let mut res = file.into_response(&req);
-    res.headers_mut().insert(CONTENT_TYPE, mime.to_string().parse()?);
+    res.headers_mut()
+        .insert(CONTENT_TYPE, mime.to_string().parse()?);
     Ok(res)
 }

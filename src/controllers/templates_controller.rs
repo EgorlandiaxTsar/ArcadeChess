@@ -42,6 +42,5 @@ async fn play() -> Result<NamedFile> {
 }
 
 fn route(path: &str) -> NamedFile {
-    NamedFile::open(path)
-        .unwrap_or(NamedFile::open("resources/templates/not-found.html").unwrap())
+    NamedFile::open(path).unwrap_or(NamedFile::open("resources/templates/not-found.html").unwrap())
 }

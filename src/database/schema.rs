@@ -1,4 +1,4 @@
-﻿// @generated automatically by Diesel CLI.
+// @generated automatically by Diesel CLI.
 
 diesel::table! {
     double_chess_games (id) {
@@ -29,7 +29,4 @@ diesel::table! {
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(
-    double_chess_games,
-    users,
-);
+diesel::allow_tables_to_appear_in_same_query!(double_chess_games, users,);

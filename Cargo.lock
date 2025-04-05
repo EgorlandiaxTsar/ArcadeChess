@@ -3,6 +3,27 @@
 version = 4
 
 [[package]]
+name = "ArcadeChess"
+version = "0.1.0"
+dependencies = [
+ "actix-files",
+ "actix-web",
+ "actix-web-actors",
+ "actix-ws",
+ "bigdecimal",
+ "chrono",
+ "diesel",
+ "dotenvy",
+ "mime",
+ "r2d2",
+ "redis",
+ "serde",
+ "serde_json",
+ "tokio",
+ "uuid",
+]
+
+[[package]]
 name = "actix"
 version = "0.13.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -322,27 +343,6 @@ name = "arc-swap"
 version = "1.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "69f7f8c3906b62b754cd5326047894316021dcfe5a194c8ea52bdd94934a3457"
-
-[[package]]
-name = "arcade_chess"
-version = "0.1.0"
-dependencies = [
- "actix-files",
- "actix-web",
- "actix-web-actors",
- "actix-ws",
- "bigdecimal",
- "chrono",
- "diesel",
- "dotenvy",
- "mime",
- "r2d2",
- "redis",
- "serde",
- "serde_json",
- "tokio",
- "uuid",
-]
 
 [[package]]
 name = "autocfg"
@@ -1308,9 +1308,9 @@ dependencies = [
 
 [[package]]
 name = "pq-sys"
-version = "0.7.0"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30b51d65ebe1cb1f40641b15abae017fed35ccdda46e3dab1ff8768f625a3222"
+checksum = "41c852911b98f5981956037b2ca976660612e548986c30af075e753107bc3400"
 dependencies = [
  "libc",
  "vcpkg",

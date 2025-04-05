@@ -1,3 +1,4 @@
+pub mod contract;
 pub mod model;
-pub mod schema;
 pub mod repository;
+pub mod schema;
