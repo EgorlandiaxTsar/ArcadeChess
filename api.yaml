@@ -1,0 +1,374 @@
+openapi: 3.1.0
+info:
+  title: ArcadeChess
+  description: Open-source platform for playing alternative chess variations like 2v2
+  version: 1.0.0
+servers:
+  - url: 'http://127.0.0.1/api/v1'
+paths:
+  /account:
+    post:
+      summary: Creates new account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyCreateUser'
+      responses:
+        '200':
+          $ref: '#/components/schemas/ResOk'
+        '400':
+          $ref: '#/components/schemas/ResBadRequest'
+        '409':
+          $ref: '#/components/schemas/ResConflict'
+        '500':
+          $ref: '#/components/schemas/ResInternalServerError'
+        '503':
+          $ref: '#/components/schemas/ResServiceUnavailable'
+  /account/{uuid}:
+    get:
+      summary: Fetches account data
+      responses:
+        '200':
+          description: Account data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    $ref: '#/components/schemas/Metadata'
+                  data:
+                    $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/schemas/ResBadRequest'
+        '404':
+          $ref: '#/components/schemas/ResNotFound'
+        '500':
+          $ref: '#/components/schemas/ResInternalServerError'
+        '503':
+          $ref: '#/components/schemas/ResServiceUnavailable'
+    patch:
+      summary: Edits account data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodyUpdateUser'
+      responses:
+        '200':
+          $ref: '#/components/schemas/ResOk'
+        '400':
+          $ref: '#/components/schemas/ResBadRequest'
+        '401':
+          $ref: '#/components/schemas/ResUnauthorized'
+        '403':
+          $ref: '#/components/schemas/ResForbidden'
+        '404':
+          $ref: '#/components/schemas/ResNotFound'
+        '409':
+          $ref: '#/components/schemas/ResConflict'
+        '500':
+          $ref: '#/components/schemas/ResInternalServerError'
+        '503':
+          $ref: '#/components/schemas/ResServiceUnavailable'
+    delete:
+      summary: Deletes account
+      responses:
+        '200':
+          $ref: '#/components/schemas/ResOk'
+        '400':
+          $ref: '#/components/schemas/ResBadRequest'
+        '401':
+          $ref: '#/components/schemas/ResUnauthorized'
+        '403':
+          $ref: '#/components/schemas/ResForbidden'
+        '404':
+          $ref: '#/components/schemas/ResNotFound'
+        '500':
+          $ref: '#/components/schemas/ResInternalServerError'
+        '503':
+          $ref: '#/components/schemas/ResServiceUnavailable'
+  /account/{uuid}/games:
+    get:
+      summary: Fetches account games
+      responses:
+        '200':
+          description: Account games
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metadata:
+                    $ref: '#/components/schemas/Metadata'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Game'
+        '400':
+          $ref: '#/components/schemas/ResBadRequest'
+        '404':
+          $ref: '#/components/schemas/ResNotFound'
+        '500':
+          $ref: '#/components/schemas/ResInternalServerError'
+        '503':
+          $ref: '#/components/schemas/ResServiceUnavailable'
+components:
+  schemas:
+    ResOk:
+      description: Operation completed with success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+          example:
+            success: true
+            message: "{request} completed with success"
+            rescode: 0
+            timestamp: 18004598632
+    ResBadRequest:
+      description: Request is malformed and/or does not contain required fields
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+          example:
+            success: false
+            message: "Received malformed request: fields [{field}, {filed}] are not present, but required, or have incorrect data types."
+            rescode: 1
+            timestamp: 18004598632
+    ResUnauthorized:
+      description: Requested endpoint requires authorization
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+          example:
+            success: false
+            message: "{endpoint} requires authorization."
+            rescode: 1
+            timestamp: 18004598632
+    ResForbidden:
+      description: Client does not have required permissions to access this resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+          example:
+            success: false
+            message: You do not have permission to do that.
+            rescode: 1
+            timestamp: 18004598632
+    ResNotFound:
+      description: Requested resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+          example:
+            success: false
+            message: Requested {entity} does not exist.
+            rescode: 1
+            timestamp: 18004598632
+    ResMethodNotAllowed:
+      description: Requested endpoint exists, but does not have the requested HTTP method
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+          example:
+            success: false
+            message: "Endpoint {endpoint} does not have HTTP {method} method, available methods are: [{method}, {method}]."
+            rescode: 1
+            timestamp: 18004598632
+    ResConflict:
+      description: In case of unique field conflicts in the database (like `nickname` or `email`), the server will not be able to fulfill the request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+          example:
+            success: false
+            message: "Detected conflict in unique field {field}, consider choosing other value for {field}."
+            rescode: 1
+            timestamp: 18004598632
+    ResInternalServerError:
+      description: An error occurred on the server side
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+          example:
+            success: false
+            message: An error occurred while processing this request.
+            rescode: 1
+            timestamp: 18004598632
+    ResServiceUnavailable:
+      description: Server is unable to fulfill the request at the moment
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+          example:
+            success: false
+            message: Server is unable to fulfill this request at the moment.
+            rescode: 1
+            timestamp: 18004598632
+    BodyCreateUser:
+      type: object
+      required:
+        - password
+        - email
+        - nickname
+      properties:
+        password:
+          type: string
+          example: "f56ac21e!_@"
+        email:
+          type: string
+          example: "name.surname@gmail.com"
+        nickname:
+          type: string
+          description: A nickname associated with the account
+          example: "name_surname99"
+    BodyUpdateUser:
+      type: object
+      properties:
+        password:
+          type: string
+          example: "f56ac21e!_@"
+        email:
+          type: string
+          example: "name.surname@gmail.com"
+        nickname:
+          type: string,
+          description: A new nickname associated with the account
+          example: "name_surname99"
+    Metadata:
+      type: object
+      required:
+        - success
+        - message
+        - timestamp
+      properties:
+        success:
+          type: boolean
+          description: Show if request was terminated with success (in case of `true`), or otherwise (in case of `false`)
+          example: true
+        message:
+          type: string
+          description: Communicates to client-side additional information about request status
+          example: User created with success.
+        rescode:
+          type: integer
+          description: A server-local response code for easy client-side error handling. Zero stands for `OK`.
+          example: 0
+        timestamp:
+          type: integer
+          description: Marks response with UTC timestamp for easy client-side handling
+          example: 18004598632
+    User:
+      type: object
+      required:
+        - id
+        - nickname
+        - registration_date
+        - ratings
+      properties:
+        id:
+          type: string
+          description: UUID associated with requested account
+          example: 550e8400-e29b-41d4-a716-446655440000
+        email:
+          type: string
+          description: Email address associated with the account. Returned only in case if request comes from account owner.
+          example: name.surname@gmail.com
+        nickname:
+          type: string
+          description: A nickname associated with the account
+          example: name_surname99
+        registration_date:
+          type: integer
+          description: Account registration date in UTC unix timestamp
+          example: 18004598632
+        ratings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rating'
+    Game:
+      type: object
+      required:
+        - id
+        - link
+        - date
+        - teams
+        - result
+      properties:
+        id:
+          type: string
+          description: UUID associated with requested game
+          example: ce1b5b4b-4da0-4c52-9be5-7b494d43bf66
+        link:
+          type: string
+          description: "Absolute link to the game moves file stored on the server. Can be requested with http://example.com{`link`}"
+          example: "/static/games/ce1b5b4b-4da0-4c52-9be5-7b494d43bf66.json"
+        date:
+          type: integer
+          description: Game termination date in UTC unix timestamp
+          example: 18004598632
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
+        result:
+          type: integer
+          description: "Game result: varies in base of variation. Basic notation is: -1 black wins, 1 white wins and 0 draw."
+          example: 0
+    Rating:
+      type: object
+      required:
+        - name
+        - bullet_rating
+        - blitz_rating
+        - rapid_rating
+        - classical_rating
+      properties:
+        name:
+          type: string
+          description: Name of chess variation
+          example: double_chess
+        bullet_rating:
+          type: float
+          description: Bullet rating for the current chess variation
+          example: 1983.56
+        blitz_rating:
+          type: float
+          description: Blitz rating for the current chess variation
+          example: 2684.05
+        rapid_rating:
+          type: float
+          description: Rapid rating for the current chess variation
+          example: 2400.98
+        classical_rating:
+          type: float
+          description: Classical rating for the current chess variation
+          example: 2109.67
+    Team:
+      type: object
+      required:
+        - name
+        - players
+      properties:
+        name:
+          type: string
+          description: Team name
+          example: white
+        players:
+          type: array
+          items:
+            type: string
+            description: Player UUID
+            example: 550e8400-e29b-41d4-a716-446655440000

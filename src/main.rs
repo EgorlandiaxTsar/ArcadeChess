@@ -1,23 +1,30 @@
-mod controllers;
+mod controller;
 mod database;
+mod dto;
+mod service;
 mod util;
 
 use actix_web::{guard, web, App, HttpResponse, HttpServer};
-use controllers::{static_controller, templates_controller};
+use controller::{r#static, template, user};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
-            .service(static_controller::assets_provider)
-            .service(templates_controller::index)
-            .service(templates_controller::profile)
-            .service(templates_controller::self_profile)
-            .service(templates_controller::archive)
-            .service(templates_controller::game)
-            .service(templates_controller::active_games)
-            .service(templates_controller::spectate)
-            .service(templates_controller::play)
+            .service(r#static::assets_provider)
+            .service(template::index)
+            .service(template::profile)
+            .service(template::self_profile)
+            .service(template::archive)
+            .service(template::game)
+            .service(template::active_games)
+            .service(template::spectate)
+            .service(template::play)
+            .service(user::create)
+            .service(user::fetch)
+            .service(user::patch)
+            .service(user::delete)
+            .service(user::fetch_games)
             .default_service(
                 web::route()
                     .guard(guard::Not(guard::Get()))
